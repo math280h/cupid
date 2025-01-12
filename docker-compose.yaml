@@ -1,0 +1,8 @@
+services:
+  cupid:
+    image: ghcr.io/math280h/cupid/cupid:latest
+    env_file:
+      - .env
+    volumes:
+      - ./data:/go/src/app/data:rw
+    pull_policy: always

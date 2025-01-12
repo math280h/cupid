@@ -1,0 +1,43 @@
+datasource db {
+    provider = "sqlite"
+    url      = "file:./data/cupid.db"
+}
+
+generator db {
+    provider = "go run github.com/steebchen/prisma-client-go"
+}
+
+// Single table just to store the current Embed message ID
+model Embed {
+    id Int @id @default(autoincrement())
+    channelId String
+    messageId String
+}
+
+model User {
+    id              Int    @id @default(autoincrement())
+    discordId       String @unique
+    discordUsername String
+
+    flowers_given    Flower[] @relation(name: "FlowerGiver")
+    flowers_received Flower[] @relation(name: "FlowerReceiver")
+
+    createdAt DateTime @default(now())
+}
+
+model Flower {
+    id Int @id @default(autoincrement())
+
+    // giver map to user
+    giver    User @relation(name: "FlowerGiver", fields: [giver_id], references: [id])
+    giver_id Int
+
+    // receiver map to user
+    receiver    User @relation(name: "FlowerReceiver", fields: [receiver_id], references: [id])
+    receiver_id Int
+
+    message String
+    public  Boolean
+
+    createdAt DateTime @default(now())
+}
