@@ -15,6 +15,10 @@ import (
 
 var s *discordgo.Session //nolint:gochecknoglobals // This is the Discord session
 
+func Int64Ptr(i int64) *int64 {
+	return &i
+}
+
 var (
 	commands = []*discordgo.ApplicationCommand{ //nolint:gochecknoglobals // This is a list of commands
 		{
@@ -62,6 +66,7 @@ var (
 					Required:    true,
 				},
 			},
+			DefaultMemberPermissions: Int64Ptr(discordgo.PermissionAdministrator),
 		},
 	}
 
@@ -143,7 +148,7 @@ func roseCommand(s *discordgo.Session, i *discordgo.InteractionCreate) {
 		Description: text,
 		Color:       0xFF0000, // Red color
 		Footer: &discordgo.MessageEmbedFooter{
-			Text: "From: " + "Your Secret Admirer xoxo",
+			Text: "Anonymous message delivered by Cupid",
 		},
 	}
 	_, err = s.ChannelMessageSendEmbed(channel.ID, embed)
